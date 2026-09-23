@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narayani Keluskar — Portfolio</title>
+    <meta name="description" content="Portfolio of Narayani Keluskar — developer, creator, and open-source contributor.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* ============================================================
+           NARAYANI KELUSKAR — NEUMORPHIC PORTFOLIO
+           Palette: Baby Pink (#F8C8DC) -> Wisteria (#C9A0DC)
+           ============================================================ */
+        :root {
+            /* ---- Accent (user chosen: baby pink + wisteria) ---- */
+            --accent-pink: #F8C8DC;
+            --accent-wisteria: #C9A0DC;
+            --accent-color: #C9A0DC;               /* primary accent hook */
+            --accent-deep: #A87BC0;                 /* darker wisteria for text/contrast */
+            --accent-gradient: linear-gradient(135deg, #F8C8DC 0%, #C9A0DC 100%);
+
+            /* ---- Neumorphic canvas ---- */
+            --bg: #ECE7F3;                         /* pale lilac-grey */
+            --bg-deep: #E3DDEE;
+            --surface: #ECE7F3;
+            --text: #4A3F5C;
+            --text-soft: #7A6E8F;
+            --text-faint: #A398B5;
+
+            /* ---- Neumorphic shadows ---- */
+            --nm-raised: 10px 10px 22px rgba(163, 157, 177, 0.55),
+                        -10px -10px 22px rgba(255, 255, 255, 0.95);
+            --nm-raised-lg: 18px 18px 36px rgba(163, 157, 177, 0.55),
+                          -18px -18px 36px rgba(255, 255, 255, 0.95);
+            --nm-inset: inset 6px 6px 12px rgba(163, 157, 177, 0.45),
+                       inset -6px -6px 12px rgba(255, 255, 255, 0.9);
+            --nm-inset-sm: inset 3px 3px 7px rgba(163, 157, 177, 0.45),
+                          inset -3px -3px 7px rgba(255, 255, 255, 0.9);
+
+            --radius: 26px;
+            --radius-sm: 16px;
+            --transition: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ============ RESET & BASE ============ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Soft ambient glows behind everything */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.55;
+            z-index: -1;
+            pointer-events: none;
+        }
+        body::before {
+            width: 46vw; height: 46vw;
+            background: var(--accent-pink);
+            top: -12vw; left: -10vw;
+        }
+        body::after {
+            width: 42vw; height: 42vw;
+            background: var(--accent-wisteria);
+            bottom: -14vw; right: -10vw;
+        }
+
+        /* ============ CUSTOM CURSOR ============ */
+        body, a, button { cursor: none !important; }
+
+        .cursor-dot, .cursor-ring {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;          /* never block clicks */
+            z-index: 99999;                /* always on top */
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            will-change: transform, width, height, opacity;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--accent-deep);
+            transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+        }
+        .cursor-ring {
+            width: 38px; height: 38px;
+            border: 2px solid var(--accent-wisteria);
+            background: rgba(248, 200, 220, 0.15);
+            transition: width 0.3s ease, height 0.3s ease,
+                        background 0.3s ease, border-color 0.3s ease,
+                        opacity 0.3s ease;
+        }
+        /* Morphed state while hovering clickable elements */
+        .cursor-ring.is-hover {
+            width: 64px; height: 64px;
+            background: rgba(248, 200, 220, 0.4);
+            border-color: var(--accent-pink);
+        }
+        .cursor-dot.is-hover {
+            width: 5px; height: 5px;
+            background: var(--accent-deep);
+        }
+        @media (hover: none), (pointer: coarse) {
+            .cursor-dot, .cursor-ring { display: none; }
+            body, a, button { cursor: auto !important; }
+        }
+
+        /* ============ TEXT SELECTION (accent) ============ */
+        ::selection {
+            background: var(--accent-wisteria);
+            color: #ffffff;
+        }
+        ::-moz-selection {
+            background: var(--accent-wisteria);
+            color: #ffffff;
+        }
+
+        /* ============ LAYOUT ============ */
+        .container {
+            width: min(1150px, 92%);
+            margin-inline: auto;
+        }
+
+        section { padding: 90px 0; }
+
+        /* ============ NAVBAR ============ */
+        nav {
+            position: fixed;
+            top: 18px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 900;
+            display: flex;
+            align-items: center;
+            gap: 26px;
+            padding: 14px 30px;
+            background: rgba(236, 231, 243, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 60px;
+            box-shadow: var(--nm-raised);
+        }
+        nav .logo {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 1.05rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        nav .nav-links { display: flex; gap: 18px; }
+        nav a.nav-link {
+            text-decoration: none;
+            color: var(--text-soft);
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+        nav a.nav-link:hover { color: var(--accent-deep); }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 120px;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            box-shadow: var(--nm-raised);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            margin-bottom: 26px;
+            width: fit-content;
+        }
+        .hero-badge .pulse {
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            background: var(--accent-deep);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(168, 123, 192, 0.5); }
+            70%  { box-shadow: 0 0 0 12px rgba(168, 123, 192, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(168, 123, 192, 0); }
+        }
+
+        .hero h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(2.4rem, 5.2vw, 4.3rem);
+            font-weight: 800;
+            line-height: 1.12;
+            color: var(--text);
+            margin-bottom: 22px;
+        }
+        .hero h1 .gradient-name {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-bio {
+            font-size: clamp(1rem, 1.6vw, 1.18rem);
+            color: var(--text-soft);
+            max-width: 480px;
+            margin-bottom: 34px;
+            font-weight: 500;
+        }
+
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 20px; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: var(--radius-sm);
+            border: none;
+            transition: var(--transition);
+        }
+        .btn-primary {
+            color: #ffffff;
+            background-image: var(--accent-gradient);
+            box-shadow: 8px 8px 18px rgba(168, 123, 192, 0.4),
+                       -6px -6px 14px rgba(255, 255, 255, 0.85);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 11px 13px 24px rgba(168, 123, 192, 0.5),
+                       -8px -8px 18px rgba(255, 255, 255, 0.9);
+        }
+        .btn-ghost {
+            color: var(--text-soft);
+            background: var(--surface);
+            box-shadow: var(--nm-raised);
+        }
+        .btn-ghost:hover {
+            transform: translateY(-3px);
+            color: var(--accent-deep);
+        }
+
+        /* Hero profile card */
+        .hero-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--nm-raised-lg);
+            padding: 44px 36px;
+            text-align: center;
+            position: relative;
+        }
+        .avatar-wrap {
+            width: 168px; height: 168px;
+            margin: 0 auto 24px;
+            padding: 12px;
+            border-radius: 50%;
+            background-image: var(--accent-gradient);
+            animation: slow-spin 14s linear infinite;
+        }
+        @keyframes slow-spin { to { transform: rotate(360deg); } }
+        .avatar {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid var(--surface);
+            display: block;
+            animation: slow-spin 14s linear infinite reverse;
+            background: var(--bg-deep);
+        }
+        .hero-card h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .hero-card .gh-handle {
+            color: var(--text-faint);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 26px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+        .stat {
+            flex: 1;
+            padding: 18px 6px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--nm-inset-sm);
+        }
+        .stat .num {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat .lbl {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-faint);
+            margin-top: 4px;
+        }
+
+        .hero-socials { display: flex; justify-content: center; gap: 16px; }
+        .social-orb {
+            width: 50px; height: 50px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--surface);
+            box-shadow: var(--nm-raised);
+            color: var(--text-soft);
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .social-orb:hover {
+            color: var(--accent-deep);
+            transform: translateY(-4px);
+        }
+        .social-orb:active { box-shadow: var(--nm-inset-sm); }
+
+        /* ============ SECTION HEADINGS ============ */
+        .section-head { text-align: center; margin-bottom: 54px; }
+        .section-head .kicker {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: var(--nm-inset-sm);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--accent-deep);
+            margin-bottom: 18px;
+        }
+        .section-head h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+            font-weight: 800;
+        }
+
+        /* ============ PROJECTS ============ */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 34px;
+        }
+        .project-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--nm-raised);
+            padding: 30px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            transform-style: preserve-3d;
+            opacity: 0;
+            transition: box-shadow 0.35s ease;
+        }
+        .project-card:hover { box-shadow: var(--nm-raised-lg); }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .repo-lang {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 15px;
+            border-radius: 30px;
+            box-shadow: var(--nm-inset-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-soft);
+        }
+        .repo-lang .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent-deep); }
+
+        .repo-stars {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--accent-deep);
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+        .repo-stars i { font-size: 0.95rem; }
+
+        .project-card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.18rem;
+            font-weight: 700;
+        }
+        .project-card h3 a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.25s ease;
+        }
+        .project-card h3 a:hover { color: var(--accent-deep); }
+
+        .project-card p {
+            color: var(--text-soft);
+            font-size: 0.92rem;
+            flex-grow: 1;
+        }
+        .repo-meta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-faint);
+        }
+        .repo-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(163, 157, 177, 0.25);
+        }
+        .repo-date { font-size: 0.78rem; color: var(--text-faint); font-weight: 600; }
+        .repo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            box-shadow: var(--nm-raised);
+            text-decoration: none;
+            color: var(--accent-deep);
+            font-weight: 700;
+            font-size: 0.82rem;
+            transition: var(--transition);
+        }
+        .repo-link:hover { box-shadow: var(--nm-inset-sm); transform: translateY(-2px); }
+
+        .loading-slot {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            color: var(--text-faint);
+            font-weight: 600;
+        }
+        .spinner {
+            width: 46px; height: 46px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            box-shadow: var(--nm-inset-sm);
+            display: grid;
+            place-items: center;
+        }
+        .spinner i { color: var(--accent-deep); animation: spin 1.2s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ============ ABOUT / CONNECT ============ */
+        .connect-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--nm-raised-lg);
+            padding: 60px 8%;
+            text-align: center;
+        }
+        .connect-card p {
+            color: var(--text-soft);
+            max-width: 560px;
+            margin: 18px auto 36px;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            padding: 44px 0 54px;
+            text-align: center;
+            color: var(--text-faint);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        footer .heart { color: var(--accent-pink); -webkit-text-stroke: 1px var(--accent-deep); }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 50px; }
+            .hero { text-align: center; padding-top: 130px; min-height: auto; padding-bottom: 40px; }
+            .hero-bio { margin-inline: auto; }
+            .hero-actions, .hero-badge { margin-inline: auto; justify-content: center; }
+            .hero-card { max-width: 420px; margin-inline: auto; width: 100%; }
+        }
+        @media (max-width: 620px) {
+            nav { gap: 14px; padding: 12px 20px; width: max-content; }
+            nav .nav-links { gap: 10px; }
+            nav a.nav-link { font-size: 0.8rem; padding: 5px 8px; }
+            .stats-row { gap: 10px; }
+            section { padding: 64px 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== CUSTOM CURSOR (fixed, pointer-events:none, z-index 99999) ===== -->
+    <div class="cursor-ring" id="cursorRing"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav>
+        <span class="logo">NK.</span>
+        <div class="nav-links">
+            <a class="nav-link" href="#home">Home</a>
+            <a class="nav-link" href="#projects">Projects</a>
+            <a class="nav-link" href="#connect">Connect</a>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-text">
+                    <div class="hero-badge hero-fade"><span class="pulse"></span> Open to collaborations</div>
+                    <h1 class="hero-fade">Hi, I am <span class="gradient-name">Narayani</span></h1>
+                    <p class="hero-bio hero-fade">
+                        Hi, I am Narayani — welcome to my little corner of the internet.
+                        Everything below is pulled live from my GitHub, so what you see is
+                        exactly what I've been building.
+                    </p>
+                    <div class="hero-actions hero-fade">
+                        <a class="btn btn-primary" href="#projects"><i class="fa-solid fa-code"></i> View My Work</a>
+                        <a class="btn btn-ghost" id="ghProfileBtn" href="https://github.com/naieshakeluskar07" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-card hero-fade">
+                    <div class="avatar-wrap">
+                        <img class="avatar" id="ghAvatar" src="https://github.com/naieshakeluskar07.png" alt="Narayani's GitHub profile picture">
+                    </div>
+                    <h2 id="ghName">Narayani Keluskar</h2>
+                    <p class="gh-handle" id="ghHandle">@naieshakeluskar07</p>
+
+                    <div class="stats-row">
+                        <div class="stat">
+                            <div class="num" id="ghRepos">—</div>
+                            <div class="lbl">Repos</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num" id="ghFollowers">—</div>
+                            <div class="lbl">Followers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num" id="ghStars">—</div>
+                            <div class="lbl">Stars</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-socials">
+                        <a class="social-orb" href="https://github.com/naieshakeluskar07" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a class="social-orb" href="https://www.linkedin.com/in/narayani-keluskar-226318407" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a class="social-orb" href="mailto:naieshakeluskar@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-head">
+                <span class="kicker">Live from GitHub</span>
+                <h2>Featured Repositories</h2>
+            </div>
+            <div class="projects-grid" id="projectsGrid">
+                <div class="loading-slot" id="loadingSlot">
+                    <div class="spinner"><i class="fa-solid fa-circle-notch"></i></div>
+                    Fetching repositories from GitHub…
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONNECT ===== -->
+    <section id="connect">
+        <div class="container">
+            <div class="connect-card">
+                <span class="kicker" style="display:inline-block;padding:8px 20px;border-radius:40px;box-shadow:var(--nm-inset-sm);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--accent-deep);">Let's Connect</span>
+                <h2 style="font-family:'Sora',sans-serif;font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:800;">Say hello<span class="gradient-name" style="background:var(--accent-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;"> 👋</span></h2>
+                <p>
+                    Thanks for stopping by! If you'd like to collaborate on a project,
+                    talk code, or just say hi — my inbox and LinkedIn are always open.
+                </p>
+                <div class="hero-actions" style="justify-content:center;">
+                    <a class="btn btn-primary" href="https://www.linkedin.com/in/narayani-keluskar-226318407" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-linkedin-in"></i> Find me on LinkedIn
+                    </a>
+                    <a class="btn btn-ghost" href="mailto:naieshakeluskar@gmail.com">
+                        <i class="fa-solid fa-envelope"></i> Email Me
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            Built with <span class="heart">♥</span> in vanilla HTML, CSS & JS · Neumorphic theme ·
+            <span id="footerYear">2026</span>
+        </div>
+    </footer>
+
+    <!-- ===== GSAP ===== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script>
+        'use strict';
+
+        /* ============================================================
+           CONFIG — hardcoded user details (Phase 1 answers)
+           ============================================================ */
+        const GITHUB_USERNAME = 'naieshakeluskar07';
+        const LINKEDIN_URL   = 'https://www.linkedin.com/in/narayani-keluskar-226318407';
+
+        document.getElementById('footerYear').textContent = new Date().getFullYear();
+        document.getElementById('ghProfileBtn').href = 'https://github.com/' + GITHUB_USERNAME;
+
+        /* ============================================================
+           1. CUSTOM CURSOR — smooth trailing ring + dot, morphs on hover
+           ============================================================ */
+        (function initCursor() {
+            if (window.matchMedia('(pointer: coarse)').matches) return; // skip on touch
+
+            const dot  = document.getElementById('cursorDot');
+            const ring = document.getElementById('cursorRing');
+
+            let mouseX = innerWidth / 2,  mouseY = innerHeight / 2;
+            let ringX = mouseX, ringY = mouseY;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+            });
+
+            // Ring lags behind with easing for a silky trail
+            (function animateRing() {
+                ringX += (mouseX - ringX) * 0.16;
+                ringY += (mouseY - ringY) * 0.16;
+                ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(animateRing);
+            })();
+
+            // Morph when hovering anything clickable
+            const HOVERABLE = 'a, button, .project-card, .social-orb, .repo-link, input, textarea, [data-hover]';
+            document.querySelectorAll(HOVERABLE).forEach((el) => {
+                el.addEventListener('mouseenter', () => {
+                    dot.classList.add('is-hover');
+                    ring.classList.add('is-hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    dot.classList.remove('is-hover');
+                    ring.classList.remove('is-hover');
+                });
+            });
+
+            // Elements added later (repo cards) get wired via delegation
+            document.addEventListener('mouseover', (e) => {
+                if (e.target.closest(HOVERABLE)) {
+                    dot.classList.add('is-hover');
+                    ring.classList.add('is-hover');
+                }
+            });
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest(HOVERABLE)) {
+                    dot.classList.remove('is-hover');
+                    ring.classList.remove('is-hover');
+                }
+            });
+
+            // Hide cursor when leaving the window
+            document.addEventListener('mouseleave', () => { dot.style.opacity = 0; ring.style.opacity = 0; });
+            document.addEventListener('mouseenter', () => { dot.style.opacity = 1; ring.style.opacity = 1; });
+        })();
+
+        /* ============================================================
+           2. GSAP — hero entrance animations
+           ============================================================ */
+        function playHeroEntrance() {
+            if (typeof gsap === 'undefined') return;
+            gsap.fromTo('.hero-fade',
+                { y: 42, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.05, ease: 'power3.out', stagger: 0.14 }
+            );
+            gsap.fromTo('nav',
+                { y: -70, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.25 }
+            );
+        }
+
+        /* ============================================================
+           3. SCROLL REVEAL — Intersection Observer + GSAP
+           ============================================================ */
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                io.unobserve(el);
+
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(el, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' });
+                } else {
+                    el.style.transform = 'none';
+                    el.style.opacity = '1';
+                }
+            });
+        }, { threshold: 0.15 });
+
+        function observeReveals() {
+            document.querySelectorAll('.project-card, .connect-card, .section-head').forEach((el) => {
+                if (el.classList.contains('project-card')) {
+                    el.style.transform = 'translateY(46px)';
+                }
+                io.observe(el);
+            });
+        }
+
+        /* ============================================================
+           4. 3D TILT — vanilla JS mousemove on project cards
+           ============================================================ */
+        function attachTilt(card) {
+            const MAX_TILT = 8; // degrees
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const px = (e.clientX - rect.left) / rect.width  - 0.5;  // -0.5 .. 0.5
+                const py = (e.clientY - rect.top)  / rect.height - 0.5;
+                card.style.transform =
+                    `perspective(900px) rotateX(${(-py * MAX_TILT).toFixed(2)}deg) rotateY(${(px * MAX_TILT).toFixed(2)}deg) translateY(-6px) scale(1.02)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+            });
+        }
+
+        /* ============================================================
+           5. GITHUB API — fetch user + repos, render into static HTML
+           ============================================================ */
+        const LANGUAGE_COLORS = {
+            JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572A5',
+            HTML: '#e34c26', CSS: '#563d7c', Java: '#b07219', 'C++': '#f34b7d',
+            C: '#555555', 'C#': '#178600', Go: '#00ADD8', Rust: '#dea584',
+            Ruby: '#701516', PHP: '#4F5D95', Swift: '#F05138', Kotlin: '#A97BFF',
+            Dart: '#00B4AB', Shell: '#89e051', Vue: '#41b883', Jupyter: '#DA5B0B'
+        };
+
+        async function fetchGitHub() {
+            const userURL    = `https://api.github.com/users/${GITHUB_USERNAME}`;
+            const reposURL   = `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`;
+
+            try {
+                const [userRes, reposRes] = await Promise.all([
+                    fetch(userURL), fetch(reposURL)
+                ]);
+                if (!userRes.ok || !reposRes.ok) throw new Error('GitHub API error');
+                const user  = await userRes.json();
+                const repos = await reposRes.json();
+                renderUser(user, repos);
+                renderRepos(repos);
+            } catch (err) {
+                console.warn('GitHub fetch failed:', err);
+                renderOffline();
+            }
+        }
+
+        function renderUser(user, repos) {
+            if (user.avatar_url) document.getElementById('ghAvatar').src = user.avatar_url;
+            if (user.name)       document.getElementById('ghName').textContent = user.name;
+            document.getElementById('ghHandle').textContent = '@' + user.login;
+            document.getElementById('ghRepos').textContent     = user.public_repos ?? 0;
+            document.getElementById('ghFollowers').textContent = user.followers ?? 0;
+
+            const totalStars = repos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
+            animateCount(document.getElementById('ghStars'), totalStars);
+            animateCount(document.getElementById('ghRepos'), user.public_repos ?? 0);
+            animateCount(document.getElementById('ghFollowers'), user.followers ?? 0);
+        }
+
+        // Numbers count up for a little extra delight
+        function animateCount(el, target) {
+            if (typeof gsap === 'undefined') { el.textContent = target; return; }
+            const obj = { v: 0 };
+            gsap.to(obj, {
+                v: target, duration: 1.4, ease: 'power2.out',
+                onUpdate: () => { el.textContent = Math.round(obj.v); }
+            });
+        }
+
+        function renderRepos(repos) {
+            const grid = document.getElementById('projectsGrid');
+            document.getElementById('loadingSlot')?.remove();
+
+            const topRepos = repos
+                .filter((r) => !r.fork)
+                .sort((a, b) => (b.stargazers_count - a.stargazers_count) || new Date(b.pushed_at) - new Date(a.pushed_at))
+                .slice(0, 6);
+
+            if (topRepos.length === 0) {
+                grid.innerHTML = '<div class="loading-slot"><p>No public repositories found yet — check back soon! ✨</p></div>';
+                return;
+            }
+
+            const html = topRepos.map((repo) => {
+                const langColor = LANGUAGE_COLORS[repo.language] || '#A87BC0';
+                const updated   = new Date(repo.pushed_at).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+                const desc = repo.description
+                    ? escapeHTML(repo.description)
+                    : 'No description provided — the code speaks for itself.';
+                return `
+                    <article class="project-card">
+                        <div class="card-top">
+                            <span class="repo-lang"><span class="dot" style="background:${langColor}"></span>${escapeHTML(repo.language || 'Code')}</span>
+                            <span class="repo-stars"><i class="fa-solid fa-star"></i> ${repo.stargazers_count}</span>
+                        </div>
+                        <h3><a href="${repo.html_url}" target="_blank" rel="noopener">${escapeHTML(repo.name)}</a></h3>
+                        <p>${desc}</p>
+                        <div class="repo-meta">
+                            <span><i class="fa-solid fa-code-fork"></i> ${repo.forks_count} forks</span>
+                            <span><i class="fa-solid fa-eye"></i> ${repo.watchers_count} watching</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="repo-date"><i class="fa-regular fa-clock"></i> Updated ${updated}</span>
+                            <a class="repo-link" href="${repo.html_url}" target="_blank" rel="noopener">
+                                <i class="fa-brands fa-github"></i> View Repo
+                            </a>
+                        </div>
+                    </article>`;
+            }).join('');
+
+            grid.innerHTML = html;
+
+            // Wire up animations for freshly injected cards
+            grid.querySelectorAll('.project-card').forEach((card) => {
+                attachTilt(card);
+            });
+            observeReveals();
+        }
+
+        function renderOffline() {
+            const grid = document.getElementById('projectsGrid');
+            document.getElementById('loadingSlot')?.remove();
+            grid.innerHTML = `
+                <div class="loading-slot">
+                    <div class="spinner"><i class="fa-solid fa-heart-crack"></i></div>
+                    <p>Couldn't reach the GitHub API right now (it may be rate-limiting).</p>
+                    <p style="margin-top:10px;">
+                        <a href="https://github.com/${GITHUB_USERNAME}" target="_blank" rel="noopener" style="color:var(--accent-deep);font-weight:700;">
+                            View my repositories directly on GitHub →
+                        </a>
+                    </p>
+                </div>`;
+            observeReveals();
+        }
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>"']/g, (c) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[c]);
+        }
+
+        /* ============================================================
+           BOOTSTRAP
+           ============================================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            playHeroEntrance();
+            observeReveals();
+            fetchGitHub();
+        });
+    </script>
+</body>
+</html>
